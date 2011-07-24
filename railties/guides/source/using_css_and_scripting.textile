@@ -10,18 +10,50 @@ By using this guide, you will learn:
 * How to customize the asset pipeline.
 
 endprologue.
-
+ 
 h3. The Rails Asset Structure
 
-With the release of Rails 3.1, +assets+ have become a part of the core Rails architecture. Assets are comprised of stylesheets, script files and images associated with your application.
+With the release of Rails 3.1, assets have become a part of the core Rails architecture. Assets are comprised of stylesheets, script files and images associated with your application.
 
 h4. Conventions of Rails Assets
 
-Prior to Rails 3.1, there was no set convention on how assets were organized in a project. Assets were placed in the /public directory, and served directly, without any processing being performed by Rails or 
+Prior to Rails 3.1, there was no set convention on how assets were organized in a project. Assets were placed in the /public directory, and served directly, without any processing being performed by Rails or conventions defined on how CSS or script files should be structured.
+
+Starting with Rails 3.1, javascript and stylesheets now have a conventional home, which helps you organize your assets more effectively. Rails generators now generate default stylesheets and coffeescript files, in their respective locations within the +app/assets/+ directory.
+
+You can use this structure to help guide how you structure your rails application. If you have CSS or javascript that is related to a particular controller, include the code in the relevant controller file. By default, Rails will include all of the stylesheets and javascript files located within +app/assets+, and combine them into one file for you.
+
+In order to generate a sca
+<shell>
+  $ rails g scaffold Contact name:string phone:string
+</shell>
+
+
+
+h4. Using third-party libraries within Rails
+
+There are two ways that third-party javascript and CSS files can be included in a Rails application:
+
+* **Through inclusion of a gem** - Gems can include their own assets, which will be included in your project when you include the gem in your Gemfile.
+* **Adding to lib/assets** - If you want to include a 3rd party javascript or CSS file that is not packaged as a gem, you can add the assets to +lib/assets/javascript+ or +lib/assets/stylesheets+. Any asset files located within these directories will be included in your +application.js+ or +application.css+ automatically.
 
 h3. Using SCSS
 
-todo
+h4. About SCSS
+
+SCSS or Sassy CSS is an extension of CSS3 adding functionality such as nesting, variables, and mixins. Each of these features bring the 'DRY' philosophy to our stylesheets. Within the context of the asset pipeline, all your SCSS files are precompiled into one valid CSS3 file and compressed for performance. You are also able to split up the css that is specific to certain aspects of your application into separate files to keep your CSS more organized.
+
+For more information about SCSS visit the "SASS Homepage":http://http://sass-lang.com/
+
+h4. Using SCSS with a Rails app
+
+Anytime that you use the scaffold or controller generator, such as:
+
+<shell>
+  $ rails g scaffold Contact
+</shell>
+
+It will generate a file (contacts.css.scss) for you in +app/assets/stylesheets+. Then when you run your rails server, and view your pages, the contents of all *.css.scss is compiled, included, and compressed into +app/assets/stylesheets/application.css+. This allows you to only add one css file (application.css) into your site template resulting in fewer requests to the server and faster page load times.
 
 h3. Using CoffeeScript
 
@@ -125,7 +157,128 @@ contact_row = function(c) {
 
 h3. Customizing Assets
 
-todo
+h3. Advanced Usage 
+
+As outlined above, the asset pipeline bundles multiple javascript and stylesheet assets into a single asset for each, which reduces the number of requests needed to load a page.  This process is great, but what happens when we need specific javascript or styles for only one section of an application.  For example, suppose we have an application using a third party map only on one view.  We might not want to bundle some assets to carry around throughout the entire website.
+
+h4. Requiring Specific Stylesheets
+
+If you like to organize your stylesheets according to different views, your layout and view might contain something like the following:
+
++app/layouts/application.html.erb+
+<ruby>
+<html>
+  <head>
+    <title>Map App</title>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <%= yield(:stylesheets) %> # this is added to include additional stylesheets from views
+  </head>
+  <body>
+  <%= yield %>
+  </body>
+</html>
+</ruby>
+
++app/views/map/index.html.erb+
+<ruby>
+<%= content_for :stylesheets do %>
+  <%= stylesheet_link_tag :map_styles %>
+<% end %>
+<h1>Map</h1>
+<div id="map"></div>
+</ruby>
+
+In order to ensure that these map styles are only included on the view above, we need to remove the +*= require_tree .+ line from +application.css+.  If this line is not removed, our specific stylesheet will be included in application.css and used throughout the entire application.
+
++app/assets/stylesheet/application.css+
+<ruby>
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_self
+ *= require_tree .       <----- REMOVE THIS LINE
+*/
+</ruby>
+
+Unfortunately, since we have removed this line we have to specify all our other stylesheets manually.
+
+The last step is to create and use the +map_styles.css+ file which we specified above in our view.
+
++app/assets/stylesheets/map_styles.css+
+<ruby>
+/*
+ *= require_self
+ *= require maps/map_style.css.scss   <--- reference other scss files or use directly below
+*/
+div#map{
+  height: 100%;
+  width: 100%;
+}
+</ruby>
+
+h4. Requiring Specific CoffeeScript / Javascript
+
+Requiring specific javascript files is similar to the process used for stylesheets.  You might be including your extra javascripts at the end of your document body like the following:
+
++app/layouts/application.html.erb+
+<ruby>
+<html>
+  <head>
+    <title>Map App</title>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <%= yield(:stylesheets) %>
+  </head>
+  <body>
+  <%= yield %>
+  <%= yield(:javascripts) %> # this is added to include additional javascript from views
+  </body>
+</html>
+</ruby>
+
++app/views/map/index.html.erb+
+<ruby>
+<%= content_for :stylesheets do %>
+  <%= stylesheet_link_tag :map_styles %>
+<% end %>
+<%= content_for :javascripts do %>
+  <%= javascript_include_tag :maps %>
+<% end %>
+<h1>Map</h1>
+<div id="map"></div>
+</ruby>
+
+As with stylesheets, in order to ensure that this javascript is only included on the view above, we need to remove the +*= require_tree .+ line from +application.js+.  If this line is not removed, our specific javascript will be included in application.js and used throughout the entire application.
+
++app/assets/javascripts/application.js+
+<ruby>
+// This is a manifest file that'll be compiled into including all the files listed below.
+// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
+// be included in the compiled file accessible from http://example.com/assets/application.js
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// the compiled file.
+//
+//= require jquery
+//= require jquery_ujs
+//= require_tree .       <----- REMOVE THIS LINE
+</ruby>
+
+The last step is to create and use the +maps.js+ file which might require several other coffeescript files:
+
++app/assets/javascripts/maps.js+
+<ruby>
+//= require maps/map_load.js.coffee
+</ruby>
+
++app/assets/javascripts/maps/map_load.js.coffee+
+<ruby>
+# some map loading code...
+alert "Map Loaded"
+</ruby>
 
 h3. Using Tilt
 
