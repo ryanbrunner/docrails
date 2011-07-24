@@ -85,15 +85,22 @@ Simply add the following code to the contacts.coffee.js file:
       url:'/contacts.json'
       success: (contacts) ->
         for c in contacts
-          $('#contacts_table').append('<tr><td>' + c.name + '</td><td>' + c.phone + '</td></tr>');
+          $('#contacts_table').append(contact_row(c));
     })
+
+  contact_row = (c) ->
+    out = '<tr><td>' + c.name + '</td><td>' + c.phone + '</td>' +
+      '<td><a href="/contacts/' + c.id + '">Show</a></td>' +
+      '<td><a href="/contacts/' + c.id + '/edit">Edit</a></td>' +
+      '<td><a href="/contacts/' + c.id + '" data-confirm="Are you sure?" data-method="delete" rel="nofollow">Destroy</a></td></tr>'
 </html>
 
-The first line there, is simply calling the dollarsign function for jQuery. Then using a -> <abbr>dashrocket</abbr> with no parameters infront to signify use of an anonymous function. I then call the ajax function as part of jQuery to the contacts.json url. I then pass the contacts inside the paranthesis followed by a dashrocket. This sets up another anonymous function, accepting the parameter named contacts. Then using the for command in CoffeeScript with the contacts parameter, I loop through the contacts data and append it to the table. To learn how the for command, and loops work, have a look at the documentation on the CoffeeScript <a href="http://jashkenas.github.com/coffee-script/#loops">website</a>.
+The first line there, is simply calling the dollarsign function for jQuery. Then using a -> <abbr>dashrocket</abbr> with no parameters infront to signify use of an anonymous function. I then call the ajax function as part of jQuery to the contacts.json url. I then pass the contacts inside the paranthesis followed by a dashrocket. This sets up another anonymous function, accepting the parameter named contacts. Then using the for command in CoffeeScript with the contacts parameter, I loop through the contacts data and use my contact_row helper function to append it to the table. To learn how the for command, and loops work, have a look at the documentation on the CoffeeScript <a href="http://jashkenas.github.com/coffee-script/#loops">website</a>.
 
 Here is the compiled code: 
 
 <html>
+  var contact_row;
   $(function() {
     return $.ajax({
       url: '/contacts.json',
@@ -102,12 +109,16 @@ Here is the compiled code:
         _results = [];
         for (_i = 0, _len = contacts.length; _i < _len; _i++) {
           c = contacts[_i];
-          _results.push($('#contacts_table').append('<tr><td>' + c.name + '</td><td>' + c.phone + '</td></tr>'));
+          _results.push($('#contacts_table').append(contact_row(c)));
         }
         return _results;
       }
     });
   });
+  contact_row = function(c) {
+    var out;
+    return out = '<tr><td>' + c.name + '</td><td>' + c.phone + '</td>' + '<td><a href="/contacts/' + c.id + '">Show</a></td>' + '<td><a href="/contacts/' + c.id + '/edit">Edit</a></td>' + '<td><a href="/contacts/' + c.id + '" data-confirm="Are you sure?" data-method="delete" rel="nofollow">Destroy</a></td></tr>';
+  };
 </html>
 
 h3. Customizing Assets
