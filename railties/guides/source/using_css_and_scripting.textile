@@ -43,7 +43,7 @@ h4. About SCSS
 
 SCSS or Sassy CSS is an extension of CSS3 adding functionality such as nesting, variables, and mixins. Each of these features bring the 'DRY' philosophy to our stylesheets. Within the context of the asset pipeline, all your SCSS files are precompiled into one valid CSS3 file and compressed for performance. You are also able to split up the css that is specific to certain aspects of your application into separate files to keep your CSS more organized.
 
-For more information about SCSS visit the "SASS Homepage":http://http://sass-lang.com/
+For more information about SCSS visit the "SASS Homepage":http://sass-lang.com/
 
 h4. Using SCSS with a Rails app
 
