@@ -10,14 +10,25 @@ By using this guide, you will learn:
 * How to customize the asset pipeline.
 
 endprologue.
-
+ 
 h3. The Rails Asset Structure
 
-With the release of Rails 3.1, +assets+ have become a part of the core Rails architecture. Assets are comprised of stylesheets, script files and images associated with your application.
+With the release of Rails 3.1, assets have become a part of the core Rails architecture. Assets are comprised of stylesheets, script files and images associated with your application.
 
 h4. Conventions of Rails Assets
 
-Prior to Rails 3.1, there was no set convention on how assets were organized in a project. Assets were placed in the /public directory, and served directly, without any processing being performed by Rails or 
+Prior to Rails 3.1, there was no set convention on how assets were organized in a project. Assets were placed in the /public directory, and served directly, without any processing being performed by Rails or conventions defined on how CSS or script files should be structured.
+
+Starting with Rails 3.1, javascript and stylesheets now have a conventional home, which helps you organize your assets more effectively. Rails generators now generate default stylesheets and coffeescript files, in their respective locations within the +app/assets/+ directory.
+
+You can use this structure to help guide how you structure your rails application. If you have CSS or javascript that is related to a particular controller, include the code in the relevant controller file. By default, Rails will include all of the stylesheets and javascript files located within +app/assets+, and combine them into one file for you.
+
+h4. Using third-party libraries within Rails
+
+There are two ways that third-party javascript and CSS files can be included in a Rails application:
+
+* **Through inclusion of a gem** - Gems can include their own assets, which will be included in your project when you include the gem in your Gemfile.
+* **Adding to lib/assets** - If you want to include a 3rd party javascript or CSS file that is not packaged as a gem, you can add the assets to +lib/assets/javascript+ or +lib/assets/stylesheets+. Any asset files located within these directories will be included in your +application.js+ or +application.css+ automatically.
 
 h3. Using SCSS
 
