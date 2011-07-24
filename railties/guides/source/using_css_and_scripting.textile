@@ -14,7 +14,7 @@ h3. Customizing Assets
 
 h3. Advanced Usage (??)
 
-As outlined above, the asset pipline bundles multiple javascript and stylesheet assets into a single asset for each, which reduces the number of requests needed to load a page.  This process is great, but what happens when we need specific javascript or styles for only one section of an application.  For example, suppose we have an application using a third party map only on one view.  We might not want to bundle some assets to carry around throughout the entire website.
+As outlined above, the asset pipeline bundles multiple javascript and stylesheet assets into a single asset for each, which reduces the number of requests needed to load a page.  This process is great, but what happens when we need specific javascript or styles for only one section of an application.  For example, suppose we have an application using a third party map only on one view.  We might not want to bundle some assets to carry around throughout the entire website.
 
 h4. Requiring Specific Stylesheets
 
