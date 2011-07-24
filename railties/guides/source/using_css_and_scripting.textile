@@ -10,13 +10,71 @@ h3. Using SCSS
 
 h3. Using CoffeeScript
 
-In short, CoffeeScript is a language that compiles into JavaScript. It allows us to write great JavaScript code, and at the same time gives a lot of great features and functionality that modern languages provide us. Now, this sounds all well and great, but why does it matter to rails developers? Rails 3.1 now has CoffeeScript added to the Gemfile by default. This means that when you run your rails generators, such as:
+h4. About CoffeeScript
+
+In short, CoffeeScript is a language that compiles into JavaScript. It allows us to write great JavaScript code, and at the same time gives a lot of great features and functionality that modern languages provide us. Now, this sounds all well and great, but why does it matter to rails developers? JavaScript is becoming more and more integrated into our applications, and moving forward to CoffeeScript keeps with the notion of Ruby on Rails: having beautiful and readable code. 
+
+h4. Using CoffeeScript with a Rails app
+
+With the changes in Rails 3.1 now has CoffeeScript added to the Gemfile by default. This means that when you run your rails generators, such as:
 
 <shell>
   $ rails g scaffold Contact name:string phone:string
 </shell>
 
-It will generate a contacts.js.coffee script file. 
+It will generate a file for you: contacts.js.coffee. Then when you run your rails server, and view your pages, the contacts.coffee has been compiled and included in the application.js. To learn more about how the asset_pipeline works, view the Asset Pipeline Rails Guide.
+
+As an example, let's say you wish to load the contacts in the index.html.erb clientside with javascript. Take the following code
+
+<html>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Phone</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @contacts.each do |contact| %>
+  <tr>
+    <td><%= contact.name %></td>
+    <td><%= contact.phone %></td>
+    <td><%= link_to 'Show', contact %></td>
+    <td><%= link_to 'Edit', edit_contact_path(contact) %></td>
+    <td><%= link_to 'Destroy', contact, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+</html>
+
+and replace it with: 
+
+<html>
+  <table id="contacts_table">
+    <tr>
+      <th>Name</th>
+      <th>Phone</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </table>
+</html>
+
+Simply add the following code to the contacts.coffee.js file:
+
+<html>
+  $ ->
+    $.ajax({
+      url:'/contacts.json'
+      success: (contacts) ->
+        for c in contacts
+          $('#contacts_table').append('<tr><td>' + c.name + '</td><td>' + c.phone + '</td></tr>');
+    })
+</html>
+
+The first line there, is simply calling the dollarsign function for jQuery. Then using a dash rocket with no parameters infront to signify use of an anonymous function. I then call the ajax function as part of jQuery to the contacts.json url. Using the for command in CoffeeScript, I loop through the contacts data and append it to the table. To learn how the for command, and loops work, have a look at the documentation on the CoffeeScript <a href="http://jashkenas.github.com/coffee-script/#loops">website</a>.
 
 h3. Customizing Assets
 
