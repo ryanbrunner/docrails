@@ -21,18 +21,20 @@ h4. Requiring Specific Stylesheets
 If you like to organize your stylesheets according to different views, your layout and view might contain something like the following:
 
 +app/layouts/application.html.erb+
+<ruby>
 <html>
-<head>
-  <title>Map App</title>
-  <%= stylesheet_link_tag    "application" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-  <%= yield(:stylesheets) %> # this is added to include additional stylesheets from views
-</head>
-<body>
-<%= yield %>
-</body>
+  <head>
+    <title>Map App</title>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <%= yield(:stylesheets) %> # this is added to include additional stylesheets from views
+  </head>
+  <body>
+  <%= yield %>
+  </body>
 </html>
+</ruby>
 
 +app/views/map/index.html.erb+
 <ruby>
@@ -72,7 +74,66 @@ div#map{
 }
 </ruby>
 
+h4. Requiring Specific CoffeeScript / Javascript
 
+Requiring specific javascript files is similar to the process used for stylesheets.  You might be including your extra javascripts at the end of your document body like the following:
+
++app/layouts/application.html.erb+
+<ruby>
+<html>
+  <head>
+    <title>Map App</title>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <%= yield(:stylesheets) %>
+  </head>
+  <body>
+  <%= yield %>
+  <%= yield(:javascripts) %> # this is added to include additional javascript from views
+  </body>
+</html>
+</ruby>
+
++app/views/map/index.html.erb+
+<ruby>
+<%= content_for :stylesheets do %>
+  <%= stylesheet_link_tag :map_styles %>
+<% end %>
+<%= content_for :javascripts do %>
+  <%= javascript_include_tag :maps %>
+<% end %>
+<h1>Map</h1>
+<div id="map"></div>
+</ruby>
+
+As with stylesheets, in order to ensure that this javascript is only included on the view above, we need to remove the +*= require_tree .+ line from +application.js+.  If this line is not removed, our specific javascript will be included in application.js and used throughout the entire application.
+
++app/assets/javascripts/application.js+
+<ruby>
+// This is a manifest file that'll be compiled into including all the files listed below.
+// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
+// be included in the compiled file accessible from http://example.com/assets/application.js
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// the compiled file.
+//
+//= require jquery
+//= require jquery_ujs
+//= require_tree .       <----- REMOVE THIS LINE
+</ruby>
+
+The last step is to create and use the +maps.js+ file which might require several other coffeescript files:
+
++app/assets/javascripts/maps.js+
+<ruby>
+//= require maps/map_load.js.coffee
+</ruby>
+
++app/assets/javascripts/maps/map_load.js.coffee+
+<ruby>
+# some map loading code...
+alert "Map Loaded"
+</ruby>
 
 
 h3. Using Tilt
