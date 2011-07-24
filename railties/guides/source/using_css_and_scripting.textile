@@ -12,5 +12,79 @@ h3. Using CoffeeScript
 
 h3. Customizing Assets
 
+h3. Advanced Usage (??)
+
+As outlined above, the asset pipline bundles multiple javascript and stylesheet assets into a single asset for each, which reduces the number of requests needed to load a page.  This process is great, but what happens when we need specific javascript or styles for only one section of an application.  For example, suppose we have an application using a third party map only on one view.  We might not want to bundle some assets to carry around throughout the entire website.
+
+h4. Requiring Specific Stylesheets
+
+If you like to organize your stylesheets according to different views, your layout and view might contain something like the following:
+
+<ruby>
+# app/layouts/application.html.erb
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Map App</title>
+  <%= stylesheet_link_tag    "application" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+  <%= yield(:stylesheets) %> # this is added to include additional stylesheets from views
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>
+
+</ruby>
+
+<ruby>
+# app/views/map/index.html.erb
+<%= content_for :stylesheets do %>
+  <%= stylesheet_link_tag :map_styles %>
+<% end %>
+
+<h1>Map</h1>
+
+<div id="map"></div>
+
+</ruby>
+
+In order to ensure that these map styles are only included on the view above, we need to remove the +*= require_tree .+ line from +application.css+.  If this line is not removed, our specific stylesheet will be included in application.css and used throughout the entire application.
+
+<ruby>
+/* app/assets/stylesheet/application.css
+ *
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_self
+ *= require_tree .              <----- REMOVE THIS LINE
+*/
+</ruby>
+
+Unfortunately, since we have removed this line we have to specify all our other stylesheets manually.
+
+The last step is to create and use the +map_styles.css+ file which we specified above in our view.
+
+<ruby>
+/* app/assets/stylesheets/map_styles.css
+ *
+ *= require_self
+ *= require maps/map_style.css.scss   <--- reference other scss files or use directly below
+*/
+
+div#map{
+  height: 100%;
+  width: 100%;
+}
+</ruby>
+
+
+
+
 h3. Using Tilt
 
