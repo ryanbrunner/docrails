@@ -1,0 +1,16 @@
+h2. Scripting and Styling on Rails
+
+This guide will...
+
+endprologue
+
+h3. The Rails Asset Structure
+
+h3. Using SCSS
+
+h3. Using CoffeeScript
+
+h3. Customizing Assets
+
+h3. Using Tilt
+
