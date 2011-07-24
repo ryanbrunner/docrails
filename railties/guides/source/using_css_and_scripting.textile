@@ -74,7 +74,26 @@ Simply add the following code to the contacts.coffee.js file:
     })
 </html>
 
-The first line there, is simply calling the dollarsign function for jQuery. Then using a dash rocket with no parameters infront to signify use of an anonymous function. I then call the ajax function as part of jQuery to the contacts.json url. Using the for command in CoffeeScript, I loop through the contacts data and append it to the table. To learn how the for command, and loops work, have a look at the documentation on the CoffeeScript <a href="http://jashkenas.github.com/coffee-script/#loops">website</a>.
+The first line there, is simply calling the dollarsign function for jQuery. Then using a -> <abbr>dashrocket</abbr> with no parameters infront to signify use of an anonymous function. I then call the ajax function as part of jQuery to the contacts.json url. I then pass the contacts inside the paranthesis followed by a dashrocket. This sets up another anonymous function, accepting the parameter named contacts. Then using the for command in CoffeeScript with the contacts parameter, I loop through the contacts data and append it to the table. To learn how the for command, and loops work, have a look at the documentation on the CoffeeScript <a href="http://jashkenas.github.com/coffee-script/#loops">website</a>.
+
+Here is the compiled code: 
+
+<html>
+  $(function() {
+    return $.ajax({
+      url: '/contacts.json',
+      success: function(contacts) {
+        var c, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = contacts.length; _i < _len; _i++) {
+          c = contacts[_i];
+          _results.push($('#contacts_table').append('<tr><td>' + c.name + '</td><td>' + c.phone + '</td></tr>'));
+        }
+        return _results;
+      }
+    });
+  });
+</html>
 
 h3. Customizing Assets
 
