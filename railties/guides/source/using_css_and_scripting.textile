@@ -1,16 +1,36 @@
 h2. Scripting and Styling on Rails
 
-This guide will...
+This guide will cover how to use the asset pipeline introduced in Rails 3.1 to add styling and scripting to your Rails application.
+By using this guide, you will learn:
 
-endprologue
+* How javascript, stylesheets, and images are organized in a Rails application.
+* How to use SCSS to style your application.
+* How to use coffeescript to add dynamic scripting to your app.
+* How to include 3rd party libraries to your application.
+* How to customize the asset pipeline.
+
+endprologue.
 
 h3. The Rails Asset Structure
 
+With the release of Rails 3.1, +assets+ have become a part of the core Rails architecture. Assets are comprised of stylesheets, script files and images associated with your application.
+
+h4. Conventions of Rails Assets
+
+Prior to Rails 3.1, there was no set convention on how assets were organized in a project. Assets were placed in the /public directory, and served directly, without any processing being performed by Rails or 
+
 h3. Using SCSS
+
+todo
 
 h3. Using CoffeeScript
 
+todo
+
 h3. Customizing Assets
+
+todo
 
 h3. Using Tilt
 
+todo
