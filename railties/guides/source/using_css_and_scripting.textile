@@ -73,6 +73,7 @@ It will generate a file for you: contacts.js.coffee. Then when you run your rail
 
 As an example, let's say you wish to load the contacts in the index.html.erb clientside with javascript. Take the following code
 
++app/views/contacts/index.html.erb+
 <html>
 <table>
   <tr>
@@ -96,7 +97,7 @@ As an example, let's say you wish to load the contacts in the index.html.erb cli
 </html>
 
 and replace it with: 
-
++app/views/contacts/index.html.erb+
 <html>
   <table id="contacts_table">
     <tr>
@@ -111,6 +112,7 @@ and replace it with:
 
 Simply add the following code to the contacts.coffee.js file:
 
++app/assets/javascripts/contacts.js.coffee+
 <html>
 $ ->
   $.ajax({
@@ -159,7 +161,7 @@ h3. Customizing Assets
 
 h3. Advanced Usage 
 
-As outlined above, the asset pipeline bundles multiple javascript and stylesheet assets into a single asset for each, which reduces the number of requests needed to load a page.  This process is great, but what happens when we need specific javascript or styles for only one section of an application.  For example, suppose we have an application using a third party map only on one view.  We might not want to bundle some assets to carry around throughout the entire website.
+As outlined above, the asset pipeline bundles multiple javascript and stylesheet assets into a single asset for each, which reduces the number of requests needed to load a page.  This process is great, but what happens when we need specific javascript or styles for only one section of an application?  For example, suppose we have an application using a third party map only on one view. We might not want to bundle some assets, since this would unnecessarily increase page load times.
 
 h4. Requiring Specific Stylesheets
 
