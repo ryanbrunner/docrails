@@ -2,13 +2,21 @@ h2. Scripting and Styling on Rails
 
 This guide will...
 
-endprologue
+endprologue.
 
 h3. The Rails Asset Structure
 
 h3. Using SCSS
 
 h3. Using CoffeeScript
+
+In short, CoffeeScript is a language that compiles into JavaScript. It allows us to write great JavaScript code, and at the same time gives a lot of great features and functionality that modern languages provide us. Now, this sounds all well and great, but why does it matter to rails developers? Rails 3.1 now has CoffeeScript added to the Gemfile by default. This means that when you run your rails generators, such as:
+
+<shell>
+  $ rails g scaffold Contact name:string phone:string
+</shell>
+
+It will generate a contacts.js.coffee script file. 
 
 h3. Customizing Assets
 
