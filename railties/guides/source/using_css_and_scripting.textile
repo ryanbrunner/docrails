@@ -21,13 +21,18 @@ Prior to Rails 3.1, there was no set convention on how assets were organized in 
 
 Starting with Rails 3.1, javascript and stylesheets now have a conventional home, which helps you organize your assets more effectively. Rails generators now generate default stylesheets and coffeescript files, in their respective locations within the +app/assets/+ directory.
 
-You can use this structure to help guide how you structure your rails application. If you have CSS or javascript that is related to a particular controller, include the code in the relevant controller file. By default, Rails will include all of the stylesheets and javascript files located within +app/assets+, and combine them into one file for you.
+For example, if you were generating a scaffold or controller for a Contact resource, and ran the following:
 
-In order to generate a sca
 <shell>
   $ rails g scaffold Contact name:string phone:string
 </shell>
 
+Rails will generate the following asset files:
+
+* +app/assets/javascripts/contacts.js.coffee+ - A **CoffeeScript** file containing scripting specific to your Contacts resource.
+* +app/assets/javascripts/contacts.css.scss+ - A **SCSS** stylesheet containing styles specific to the Contact resource.
+
+You can use this structure to help guide how you structure your rails application. If you have CSS or javascript that is related to a particular controller, include the code in the relevant controller file. By default, Rails will include all of the stylesheets and javascript files located within +app/assets+, and combine them into one file for you.
 
 
 h4. Using third-party libraries within Rails
@@ -43,7 +48,7 @@ h4. About SCSS
 
 SCSS or Sassy CSS is an extension of CSS3 adding functionality such as nesting, variables, and mixins. Each of these features bring the 'DRY' philosophy to our stylesheets. Within the context of the asset pipeline, all your SCSS files are precompiled into one valid CSS3 file and compressed for performance. You are also able to split up the css that is specific to certain aspects of your application into separate files to keep your CSS more organized.
 
-For more information about SCSS visit the "SASS Homepage":http://http://sass-lang.com/
+For more information about SCSS visit the "SASS Homepage":http://sass-lang.com/
 
 h4. Using SCSS with a Rails app
 
