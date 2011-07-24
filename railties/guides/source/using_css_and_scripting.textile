@@ -95,7 +95,9 @@ contact_row = (c) ->
     '<td><a href="/contacts/' + c.id + '" data-confirm="Are you sure?" data-method="delete" rel="nofollow">Destroy</a></td></tr>'
 </html>
 
-The first line is calling the dollarsign function for jQuery. Using a -> <abbr>dashrocket</abbr> here passes an anonymous function, with everything tabbed in below as part of that function. I then call the ajax function as part of jQuery to the contacts.json url. I then pass the contacts inside the paranthesis followed by a dashrocket. This sets up another anonymous function, accepting the parameter named contacts. Then using the for command in CoffeeScript with the contacts parameter, I loop through the contacts data and use my contact_row helper function to append it to the table. To learn how the for command, and loops work, have a look at the documentation on the CoffeeScript <a href="http://jashkenas.github.com/coffee-script/#loops">website</a>. Looking at the contact_row defintion, you can see that a named function is setup very similarly to that of an anonymous function in coffeescript, you just use a variable name and equal sign to set it. 
+The first line is calling the dollarsign function for jQuery. Using a -> <abbr>dashrocket</abbr> here passes an anonymous function, with everything tabbed in below as part of that function. I then call the ajax function as part of jQuery to make a GET request to the contacts.json url. I then pass the contacts inside the paranthesis followed by a dashrocket. This sets up another anonymous function, accepting the parameter named contacts. Then using the for command in CoffeeScript with the contacts parameter, I loop through the contacts data and use my contact_row helper function to append it to the table. To learn how the for command, and loops work, have a look at the documentation on the CoffeeScript <a href="http://jashkenas.github.com/coffee-script/#loops">website</a>. 
+
+Looking at the contact_row defintion, you can see that a named function is setup very similarly to that of an anonymous function in coffeescript, you just use a variable name and equal sign to set it. 
 
 Here is the compiled code: 
 
