@@ -36,7 +36,101 @@ todo
 
 h3. Using CoffeeScript
 
-todo
+h4. About CoffeeScript
+
+In short, CoffeeScript is a language that compiles into JavaScript. It allows us to write great JavaScript code, and at the same time gives a lot of great features and functionality that modern languages provide us. Now, this sounds all well and great, but why does it matter to rails developers? JavaScript is becoming more and more integrated into our applications, and moving forward to CoffeeScript keeps with the notion of Ruby on Rails: having beautiful and readable code. 
+
+h4. Using CoffeeScript with a Rails app
+
+With the changes in Rails 3.1 now has CoffeeScript added to the Gemfile by default. This means that when you run your rails generators, such as:
+
+<shell>
+  $ rails g scaffold Contact name:string phone:string
+</shell>
+
+It will generate a file for you: contacts.js.coffee. Then when you run your rails server, and view your pages, the contacts.coffee has been compiled and included in the application.js. To learn more about how the asset_pipeline works, view the Asset Pipeline Rails Guide.
+
+As an example, let's say you wish to load the contacts in the index.html.erb clientside with javascript. Take the following code
+
+<html>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Phone</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @contacts.each do |contact| %>
+  <tr>
+    <td><%= contact.name %></td>
+    <td><%= contact.phone %></td>
+    <td><%= link_to 'Show', contact %></td>
+    <td><%= link_to 'Edit', edit_contact_path(contact) %></td>
+    <td><%= link_to 'Destroy', contact, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+</html>
+
+and replace it with: 
+
+<html>
+  <table id="contacts_table">
+    <tr>
+      <th>Name</th>
+      <th>Phone</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </table>
+</html>
+
+Simply add the following code to the contacts.coffee.js file:
+
+<html>
+$ ->
+  $.ajax({
+    url:'/contacts.json'
+    success: (contacts) ->
+      for c in contacts
+        $('#contacts_table').append(contact_row(c));
+  })
+  
+contact_row = (c) ->
+  out = '<tr><td>' + c.name + '</td><td>' + c.phone + '</td>' +
+    '<td><a href="/contacts/' + c.id + '">Show</a></td>' +
+    '<td><a href="/contacts/' + c.id + '/edit">Edit</a></td>' +
+    '<td><a href="/contacts/' + c.id + '" data-confirm="Are you sure?" data-method="delete" rel="nofollow">Destroy</a></td></tr>'
+</html>
+
+The first line is calling the dollarsign function for jQuery. Using a -> <abbr>dashrocket</abbr> here passes an anonymous function, with everything tabbed in below as part of that function. I then call the ajax function as part of jQuery to the contacts.json url. I then pass the contacts inside the paranthesis followed by a dashrocket. This sets up another anonymous function, accepting the parameter named contacts. Then using the for command in CoffeeScript with the contacts parameter, I loop through the contacts data and use my contact_row helper function to append it to the table. To learn how the for command, and loops work, have a look at the documentation on the CoffeeScript <a href="http://jashkenas.github.com/coffee-script/#loops">website</a>. Looking at the contact_row defintion, you can see that a named function is setup very similarly to that of an anonymous function in coffeescript, you just use a variable name and equal sign to set it. 
+
+Here is the compiled code: 
+
+<html>
+var contact_row;
+$(function() {
+  return $.ajax({
+    url: '/contacts.json',
+    success: function(contacts) {
+      var c, _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = contacts.length; _i < _len; _i++) {
+        c = contacts[_i];
+        _results.push($('#contacts_table').append(contact_row(c)));
+      }
+      return _results;
+    }
+  });
+});
+contact_row = function(c) {
+  var out;
+  return out = '<tr><td>' + c.name + '</td><td>' + c.phone + '</td>' + '<td><a href="/contacts/' + c.id + '">Show</a></td>' + '<td><a href="/contacts/' + c.id + '/edit">Edit</a></td>' + '<td><a href="/contacts/' + c.id + '" data-confirm="Are you sure?" data-method="delete" rel="nofollow">Destroy</a></td></tr>';
+};
+</html>
 
 h3. Customizing Assets
 
